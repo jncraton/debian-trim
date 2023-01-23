@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+# Remove temp files
+apt clean
+rm -rf /home/user/{.[!.],}*
+rm -rf /root/{.[!.],}*
+rm -rf /tmp/{.[!.],}*
+rm -rf /var/log/*
+rm -rf /var/backups/*
+rm -rf /var/cache/*
+rm -rf /var/lib/apt/lists
+rm -rf /var/lib/dpkg/*-old
+
+# Remove backgrounds
+rm -rf /usr/share/backgrounds/*
+
+# Remove old boot images
+rm -f /boot/*.old
+
+# Remove extra kernel modules
+rm -rf /lib/modules/*/build
+rm -rf /lib/modules/*/kernel/sound
+rm -rf /lib/modules/*/kernel/zfs
+rm -rf /lib/modules/*/kernel/wireguard
+rm -rf /lib/modules/*/kernel/net/wireless
+rm -rf /lib/modules/*/kernel/net/bluetooth
+rm -rf /lib/modules/*/kernel/fs/ocfs2
+rm -rf /lib/modules/*/kernel/fs/btrfs
+rm -rf /lib/modules/*/kernel/fs/xfs
+rm -rf /lib/modules/*/kernel/fs/nfs
+rm -rf /lib/modules/*/kernel/fs/nls
+rm -rf /lib/modules/*/kernel/drivers/wireless
+rm -rf /lib/modules/*/kernel/drivers/bluetooth
+rm -rf /lib/modules/*/kernel/drivers/hwmon
+rm -rf /lib/modules/*/kernel/drivers/staging
+rm -rf /lib/modules/*/kernel/drivers/infiniband
+rm -rf /lib/modules/*/kernel/drivers/media
+rm -rf /lib/modules/*/kernel/drivers/scsi
+rm -rf /lib/modules/*/kernel/drivers/iio
+rm -rf /lib/modules/*/kernel/drivers/net/wireless
+rm -rf /lib/modules/*/kernel/drivers/net/usb
+rm -rf /lib/modules/*/kernel/drivers/net/can
+rm -rf /lib/modules/*/kernel/drivers/usb/misc
+rm -rf /lib/modules/*/kernel/drivers/usb/serial
+rm -rf /lib/modules/*/kernel/drivers/usb/gadget
+find /lib/modules/*/kernel/drivers/net/ethernet/ -mindepth 1 -maxdepth 1 -not -name intel -not -name amd -not -name realtek -exec rm -rf {} \;
+find /lib/modules/*/kernel/drivers/gpu/drm/ -mindepth 1 -maxdepth 1  -type d -not -name virtio -not -name vboxvideo -not -name cirrus -not -name vmwgfx -not -name qxl -not -name ttm -exec rm -rf {} \;
+
+# Remove graphics drivers
+# (Intel, Radeon, Nouveau)
+rm -f /usr/lib/x86_64-linux-gnu/dri/i* 
+rm -f /usr/lib/x86_64-linux-gnu/dri/r* 
+rm -f /usr/lib/x86_64-linux-gnu/dri/n*
+rm -f /usr/lib/x86_64-linux-gnu/dri/zlink_dri.so
+
+# Remove firmware files unused by VM
+rm -rf /usr/lib/firmware
